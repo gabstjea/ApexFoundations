@@ -1,0 +1,24 @@
+// Anonymous class for Bulk inserting records
+
+// Creating the contact list to update
+List<Contact> conList = new List<Contact> {
+        new Contact(FirstName='Joe', LastName='Smith', Department='Finance'),
+        new Contact(FirstName='Kathy', LastName='Smith', Department='Technology'),
+        new Contact(FirstName='Caroline', LastName='Roth', Department='Finance'),
+        new Contact(FirstName='Kim', LastName='Shain', Department='Education')};
+            
+	// Bulk instert all contacts with one DML call
+	insert conList;
+    
+	// List to hold the new contacts to update
+	List<Contact> listToUpdate = new List<Contact>();
+	for(Contact con : listToUpdate) {
+        if (con.Department == 'Finace') {
+            con.Title = 'Finance analyst';
+            listToUpdate.add(con);
+        } // if
+    } // for
+
+	// Bulk update all contacts with one DML call
+	update listToUpdate;
+   
