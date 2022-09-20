@@ -1,0 +1,21 @@
+// Coding exercise 3: Opportunity Follow Up
+//
+// This class creates a Task record with a default message and lookup relationship for an newly inserted or updated
+// Opportunity object. The condition is that the StageName field of the Opportunity must be set to 'Closed Won'.
+
+trigger ClosedOpportunityTrigger on Opportunity (after insert, after update) {
+    // Collection of Tasks to upsert
+    List<Task> taskToUpsert = new List<Task>();
+    // Retrieve the newly inserted/updated Opportunities
+    List<Opportunity> oppList = [SELECT Id FROM Opportunity WHERE Id IN :Trigger.New AND StageName='Closed Won'];
+    for (Opportunity opp : oppList) {
+        taskToUpsert.add(new Task(Subject = 'Follow Up Test Task',
+                                     WhatId = opp.Id));
+         	   
+        
+    } // for
+    // DML upsert  
+    if (taskToUpsert.size() > 0) {
+    	insert taskToUpsert;
+    }
+}

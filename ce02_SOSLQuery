@@ -1,0 +1,16 @@
+// Codeing exercise 2: Create a Salesforce Object Search Language Query
+//
+// Task: Create a Apex class called ContactAndLeadSearch and a method called searchContactsAndLeads that takes 
+// in one string parameter a string and returns a List<List<sObject>>. The method should return a Contact and 
+// Lead object whose lastnames match the {@code str} parameter.
+//
+// Solution
+
+public class ContactAndLeadSearch {
+	
+    public static List<List<sObject>> searchContactsAndLeads(String str) {
+        List<List<sObject>> listSearch = [FIND :str IN NAME FIELDS 
+                                          RETURNING Lead(Name), Contact(Name)];
+        return listSearch;
+    }
+}

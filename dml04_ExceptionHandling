@@ -1,0 +1,14 @@
+// Data Manipulation Language excercise 4: Exception Handling
+//
+// Anonymous class
+//
+
+try {
+	// This causes an exception because a name field is not
+	// provided for the Account object
+	
+	Account acct = new Account();
+	insert acct;    
+} catch (DmlException e) {
+    System.debug('A DML exception has occured' + e.getMessage());
+}

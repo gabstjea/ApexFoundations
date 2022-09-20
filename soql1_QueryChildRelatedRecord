@@ -1,0 +1,13 @@
+// Salesforce Object Query Language (SOQL) exercise 1: Query Child Related Record
+//
+// This program queryies a related record from the Account sObject and outputs the first and last
+// information onto the console.
+
+// The child object being queried must be plural.
+Account[] acctsWithContacts = [SELECT Name, (SELECT FirstName,LastName FROM Contacts) 
+                  			   FROM Account 
+                   			   WHERE Name = 'Get Cloudy'];
+
+Contact firstContact = acctsWithContacts[0].Contacts;
+System.debug('first name ' + firstContact.FirstName + ' last Name ' + firstContact.LastName);
+System.debug('Contact details: ' + firstContact);

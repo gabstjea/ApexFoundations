@@ -1,0 +1,16 @@
+// Coding exercise 1: Creating a SOQL query
+//
+// Task: Create a class called ContactSearch that uses a method called searchForContacts with two string
+//       parameters. The first parameter is the contacts first name and the second parameter is the contact's
+//       MailingPostalCode field. The function should return a List<Contact> object of the desired paremetrs.
+
+public class ContactSearch {
+    
+    public static List<Contact> searchForContacts(String str1,  String str2) {
+      
+    	List<Contact> contactList = [SELECT Name FROM Contact WHERE (LastName=:str1 AND MailingPostalCode=:str2)];
+      return contactList;
+    
+    } // searchForContacts
+
+}

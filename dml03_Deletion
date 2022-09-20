@@ -1,0 +1,8 @@
+// Data Manipulation Language (DML) exercise 3: Deleting a record
+
+// Anonymous Apex class
+
+// Query the record from the database
+Contact[] contactsToDel = [SELECT id FROM Contact WHERE LastName='Smith'];
+
+delete contactsToDel;

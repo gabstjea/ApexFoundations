@@ -1,0 +1,48 @@
+// Coding exercise 3: Populate Child related record
+//
+// This program creates an Apex Trigger that creates a new Opportunity related record for every account that 
+// is made.
+
+trigger AddRelatedRecord on Account (after insert, after update) {
+
+    // Create Opportunity List for DOM insertion
+    List<Opportunity> oppList = new List<Opportunity>();
+    
+    // This is the Naive and incorrect Way 
+    // Query the newly inserted/updated account objects with its Opportunity related record ID
+    Map<Id, Account> acctsWithOpps = new Map<Id, Account>(
+        [SELECT Id, (SELECT Id FROM Opportunities) FROM Account
+        WHERE Id IN :Trigger.New]);
+    
+    // Iterate through the newly inserted/account objects and populate the Opportunity
+    // related record if missing
+    for (Account a: Trigger.New) {
+       	Integer oppSize = acctsWithOpps.get(a.Id).Opportunities.size();
+        System.debug(a.Name + ' Opportunity field: ' + oppSize);
+        // Check if the Account has an Opportunity
+        if (oppSize == 0) {
+            // If it doesn't, add a default Opportunity
+          	oppList.add(new Opportunity(Name = a.Name + ' Opportunity',
+                           StageName = 'Prospecting',
+                           CloseDate = System.today().addMonths(1),
+                           Discount_Percent__c = 3,
+                           AccountId = a.Id));
+        } // if      
+    } // for    
+    
+    // Correct Way Using the Bulk design pattren
+    oppList.clear();
+    // Find all newly created/updated Account records with an empty Opportunity related record
+    List<Account> acctWithNoOpp = [SELECT Id FROM Account WHERE id IN : Trigger.New AND Id NOT IN (SELECT AccountID FROM Opportunity)];
+    for (Account act : acctWithNoOpp) {
+    	oppList.add(new Opportunity(Name = a.Name + ' Opportunity',
+                           StageName = 'Prospecting',
+                           CloseDate = System.today().addMonths(1),
+                           Discount_Percent__c = 3,
+                           AccountId = act.Id));
+    } // for 
+    
+    if (oppList.size() > 0) {
+        upsert oppList;
+     } // if
+}

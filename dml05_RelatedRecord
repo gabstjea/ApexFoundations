@@ -1,0 +1,22 @@
+// Data Manipulation Model (DML) exercise 5: creating a related record
+//
+// This program adds a contact to an Account by the use of a field that has a lookup
+// or master dealted relationship (type reference). In this program, the AccountID
+// field is of type reference. 
+
+Account acct = new Account(Name='SFDC Account');
+insert acct;
+
+// Once the object is inserted, the sObject will be populated
+// with an ID
+
+ID acctID = acct.ID;
+
+// Adding a Contact recrod to an Account record. ( Creating a related record)
+Contact mario = new Contact(
+	FirstName='Mario',
+	LastName='Ruiz',
+	Phone='470.331.3672',
+	AccountId=acctID);
+
+insert mario;

@@ -1,0 +1,24 @@
+// Data Manipulation Model (DML) exercise 5e1: updating related record fields
+//
+// This program demonstrates how a child object in a lookup.master-slave relationship can modify the fields of its parent
+// and how to propely update a related field modified by its child
+// In particular, in this program, A Contact record is related to an Account record. The sObject containing the Contact
+// record modifies the industry field of the Account record it is related to. When updating the records, the account 
+// field must be invoked by the child record.
+//
+// Anonymous class
+
+// Query a Contact record and retrieve the name associated with its Account (the related record)
+Contact[] contactQuery = [SELECT Account.name FROM Contact Where FirstName='Mario' AND LastName='Ruiz' LIMIT 1];
+Contact firstContact = contactQuery[0];
+
+// Display the name associated with the account
+System.debug('Mario's account name ' + firstContact.Account.name);
+
+// Modify the feilds of the record and its related record
+firstContact.phone='(404)-723-1074';
+firstContact.Account.Industry = 'Technology';
+
+// Updating the Contact objects field and its related record
+update contactQuery;
+update contactQuery.Account;

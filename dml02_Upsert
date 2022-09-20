@@ -1,0 +1,27 @@
+// Data Manipulation Language (DML) exercise 2: upsert command
+// The upsert command updates existing records and creates new ones within the same line
+//     - Do not have to check if a record exists
+//     - Uses a records primary key, an idLookup field, or an external ID feild to determine
+//       whether or not to create a new record or update an existing one.
+//       	- if key is not matched, a new object record is created
+//       	- if key is matched once, the existing object record is updated
+//       	- if key is matched multiple times, an error is generated
+
+// Anonymous class
+
+// Insert the Josh contact
+Contact josh = new Contact(FirstName='Josh', LastName='Kaplan', Department='Finance');
+insert josh;
+
+// The josh record has been inserted and now has an ID. This will be used to match records
+// by upest
+
+josh.Description = 'Josh\'s record has been updated by the upsert operation.';
+
+// Create a new record but don't insert it
+Contact kathy = new Contact(FirstName='Kathy', LastName='Brown', Department='Technology');
+
+List<Contact> contacts = new List<Contact> {josh, kathy};
+
+// Update Josh and Kathy is created
+upsert contacts;
