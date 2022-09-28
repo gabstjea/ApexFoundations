@@ -2,4 +2,4 @@
 
 ## Unit Testing
 * Syntax
-    *`@isTest static void testName() {}`
+    -`@isTest static void testName() {}`
