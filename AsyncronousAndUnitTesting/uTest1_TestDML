@@ -24,8 +24,8 @@ trigger AccountDeletion on Account (before delete) {
 public class TestAccountDeletion {
     @isTest static void TestDeleteAccountWithOneOpporunity() {
     	Account acct = new Account(Name='ToysRus');
-      // Insert here so that the Account can have an Id
-	  	insert acct; 
+        // Insert here so that the Account can have an Id
+	insert acct; 
     	Opportunity opp = new Opportunity(Name = acct.name + ' Opportunity',
                 	    			Stagename = 'Prospecting',
                     				CloseDate = System.today().addMonths(1),
