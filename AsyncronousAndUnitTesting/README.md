@@ -10,5 +10,8 @@
   * System.assertNotEquals(expected, actual, msg)
 * Apex Unit tests can test Apex triggers and DML operations
   * Invoking `.addError('msg')` on an object prevents DML operations from being performed on it
-  * See [uTest1_TestDML](./uTest1_TestDML)
+     * Use this in the class to be tested
+     * Use Test.startTest() and Test.stopTest() to retrieve the error
+     * See [uTest1_TestDML](./uTest1_TestDML)
   * DML operations performed in a unit test are automatically deleted
+  
