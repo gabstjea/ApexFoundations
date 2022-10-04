@@ -1,0 +1,56 @@
+// Asyncronous Apex exercise 1: Future Apex Methods
+//
+// Create a future Apex  method that counts the number of Contacts that an Account has and 
+// updates the number in a custom field named 'Number_Of_Contacts__c'.
+
+// Asyncronous Apex class
+public class AccountProcessor {
+    @future
+    public static void countContacts(List<Id> accountIds) {
+        Integer num = 0;
+	    	List<Account> accountList = [SELECT Id, (SELECT Id From Contacts) 
+                                     FROM Account 
+                                     WHERE Id IN :accountIds];
+        for (Account acct : accountList) {           
+            acct.Number_Of_Contacts__c = acct.Contacts.size();
+        } // for
+        upsert accountList;        
+    } // countContacts
+} // AccountProcessor
+
+// Apex testing class
+@isTest
+public class AccountProcessorTest {
+	@isTest()
+    static void Testing() {
+        List<Account> acctList = new List<Account> {
+            new Account(Name = 'Gabe Inc'),
+            new Account(Name = 'Big P Corp'),
+            new Account(Name = 'Lazar Corp')};
+        insert acctList; // populate acct Ids
+        
+        List<Contact> contactList = new List<Contact> {
+            						new Contact(FirstName = 'Jacob', LastName = 'Mary', AccountId = acctList[0].Id),
+         							  new Contact(FirstName = 'Michael', LastName = 'Sue', AccountId = acctList[1].Id),
+                        new Contact(FirstName = 'Amy', LastName = 'West', AccountId = acctList[1].Id),
+         							  new Contact(FirstName = 'Jamal', LastName = 'Link', AccountId = acctList[2].Id)};        
+        insert contactList;
+        // Map the Ids of each account object into a Map object
+        Map<Id, Account> acctMap = new Map<Id, Account>(acctList);
+        
+       	Test.startTest();        
+ 		    AccountProcessor.countContacts(new List<Id>(acctMap.keySet()));
+        Test.stopTest();
+        
+        // Retrieve the newly updated acccount info
+        List<Account> acctUpdate = [SELECT Name, Number_Of_Contacts__c FROM Account WHERE Id IN :acctMap.keySet()];
+        
+        // Debugging
+        for (Account acct : acctUpdate) {
+            System.debug(acct.Name + ' : ' + 'Num Contacts : '  + acct.Number_Of_Contacts__c);
+        } // for
+        
+        System.assertEquals(1, acctUpdate[0].Number_Of_Contacts__c); // The acct 'Gabe Inc' has one contact
+        
+    } // Testing
+} // AccountProcessorTest
